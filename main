@@ -1,0 +1,19 @@
+from sklearn.datasets import load_iris
+from sklearn.model_selection import cross_val_score
+from sklearn.neighbors import KNeighborsClassifier
+from scipy.stats import ttest_rel
+import numpy as np
+
+# Load data
+X, y = load_iris(return_X_y=True)
+
+# Custom vs sklearn KNN comparison
+knn_sklearn = KNeighborsClassifier(n_neighbors=3)
+scores_sklearn = cross_val_score(knn_sklearn, X, y, cv=5)
+
+# Simulate a custom model’s scores
+scores_custom = scores_sklearn + np.random.normal(0, 0.01, len(scores_sklearn))
+
+# Paired t-test
+t_stat, p_value = ttest_rel(scores_sklearn, scores_custom)
+print("p-value:", p_value)
